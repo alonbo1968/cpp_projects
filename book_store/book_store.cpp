@@ -44,6 +44,8 @@ int Inventory::remove_item(int id) {
 			break;
 		}
 	}
+	cout << endl;
+	cout << "Remove item:" << endl;
 	if (is_found == true) {
 		cout << "item with an ID of " << id << " was removed from stock!\n";
 		return 0;
@@ -64,6 +66,7 @@ int Inventory::update_item_price(int id, float price) {
 			break;
 		}
 	}
+	cout << "Update item" << endl;
 	if (is_found == true) {
 		cout << "item ID " << id << " price was changed to " << price << " Dollars.\n";
 		return 0;
@@ -75,6 +78,7 @@ int Inventory::update_item_price(int id, float price) {
 }
 void Inventory::display_items() {
 	cout << endl;
+	cout << "Display items list:" << endl;
 	for (auto it = items.begin(); it < items.end(); it++) {
 		cout << "Item ID " << it->id << ", Name " << it->name << ", Price " << it->price << ", Quantity " << it->quantity << endl;
 	};
@@ -99,8 +103,12 @@ int main()
 	inventoy.update_item_price(100002, 45.99);
 	inventoy.display_items();
 
+	inventoy.remove_item(100002);
+	inventoy.display_items();
+
 	cout << endl;
 	cout << endl;
+
 	return 0;
 }
 
