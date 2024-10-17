@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6311b03d-90f0-4c7b-8303-0e119de92435}</ProjectGuid>
+    <ProjectGuid>{2af3521f-6dfc-478a-900b-698da2be6153}</ProjectGuid>
     <RootNamespace>bookstore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -128,9 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="book_store.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
