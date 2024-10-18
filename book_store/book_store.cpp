@@ -2,6 +2,7 @@
 //
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -32,14 +33,6 @@ public:
 	void display_items();
 };
 
-//void Inventory::add_item(int id, string name, float price, int quantity) {
-//	items.push_back(Item(id, name, price, quantity));
-//	cout << "Add new items:" << endl;
-//	cout << "  ID:" << id << endl;
-//	cout << "  Name: " << name << endl;
-//	cout << "  Price: " << price << endl;
-//	cout << "  Items added: " << quantity << endl;
-//}
 void Inventory::add_item() {
 	int id;
 	string name;
@@ -48,13 +41,17 @@ void Inventory::add_item() {
 	cout << "Add new item:" << endl;
 	cout << "  Enter ID: ";
 	cin >> id;
-	cout << "  Enter Name:";
-	cin >> name;
-	cout << "  Enter Price:";
+	cout << "  Enter Name: ";
+	cin.ignore(); //Enable mixing >> and getline()
+	getline(cin, name);// Input string with Space characters
+	cout << "  Enter Price: ";
 	cin >> price;
-	cout << "  Enter Quantity:";
+	cout << "  Enter Quantity: ";
 	cin >> quantity;
 	items.push_back(Item(id, name, price, quantity));
+
+	// Add the new item to the data file:
+	myfile_o << id << ',' << name << ',' << price << ',' << quantity << endl;
 }
 
 int Inventory::remove_item(int id) {
@@ -103,8 +100,8 @@ void Inventory::display_items() {
 	myfile_o << endl;
 	cout << "Display items list:" << endl;
 	for (auto it = items.begin(); it < items.end(); it++) {
-		cout << "Item ID " << it->id << ", Name " << it->name << ", Price " << it->price << ", Quantity " << it->quantity << endl;
-		myfile_o << "Item ID " << it->id << ", Name " << it->name << ", Price " << it->price << ", Quantity " << it->quantity << endl;
+		cout << "Item ID: " << it->id << ", Name: " << it->name << ", Price: " << it->price << ", Quantity: " << it->quantity << endl;
+		myfile_o << "Item ID: " << it->id << ", Name: " << it->name << ", Price: " << it->price << ", Quantity: " << it->quantity << endl;
 
 	};
 }
@@ -119,7 +116,6 @@ int main()
 
 	myfile_o.open("output.csv", fstream::app);
 	if (myfile_o.is_open()) {
-
 	}
 	else {
 		cout << "Error openning the file for writing!" << endl;
@@ -160,7 +156,7 @@ int main()
 			inventoy.remove_item(item_id);
 			break;
 		case 4:
-			cout << "Enter the item ID: ";
+			cout << "Print the items list: ";
 			inventoy.display_items();
 			break;
 		case 5:
@@ -168,6 +164,7 @@ int main()
 			exit = true;
 			break;
 
+		case 0:
 		default:
 			cout << "Invalid option entered. Try again!" << endl;
 			break;
@@ -175,16 +172,6 @@ int main()
 
 		cout << endl;
 	}
-
-		//inventoy.add_item();
-		//inventoy.display_items();
-
-		//inventoy.update_item_price(100004, 154.5);
-		//inventoy.update_item_price(100002, 45.99);
-		//inventoy.display_items();
-
-		//inventoy.remove_item(100002);
-		//inventoy.display_items();
 
 	myfile_o.close();
 	return 0;
