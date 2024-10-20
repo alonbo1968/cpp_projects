@@ -1,9 +1,15 @@
 // book_store.cpp : Book Store Application
 //
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
-//#include "main.h"
+
 using namespace std;
+
+ofstream myfile_o;
+ifstream myfile_i;
+
 
 class Item {
 public:
@@ -20,19 +26,32 @@ class Inventory {
 	vector <Item> items;//Create a vector of "Item" object 
 public:
 	//Inventory();
-	void add_item(int id, string name, float price, int quantity);
+	//void add_item(int id, string name, float price, int quantity);
+	void add_item();
 	int remove_item(int id);
 	int update_item_price(int id, float price);
 	void display_items();
 };
 
-void Inventory::add_item(int id, string name, float price, int quantity) {
+void Inventory::add_item() {
+	int id;
+	string name;
+	float price;
+	int quantity;
+	cout << "Add new item:" << endl;
+	cout << "  Enter ID: ";
+	cin >> id;
+	cout << "  Enter Name: ";
+	cin.ignore(); //Enable mixing >> and getline()
+	getline(cin, name);// Input string with Space characters
+	cout << "  Enter Price: ";
+	cin >> price;
+	cout << "  Enter Quantity: ";
+	cin >> quantity;
 	items.push_back(Item(id, name, price, quantity));
-	cout << "Add new items:" << endl;
-	cout << "  ID:" << id << endl;
-	cout << "  Name: " << name << endl;
-	cout << "  Price: " << price << endl;
-	cout << "  Items added: " << quantity << endl;
+
+	// Add the new item to the data file:
+	myfile_o << id << ',' << name << ',' << price << ',' << quantity << endl;
 }
 
 int Inventory::remove_item(int id) {
@@ -78,11 +97,13 @@ int Inventory::update_item_price(int id, float price) {
 }
 void Inventory::display_items() {
 	cout << endl;
+	myfile_o << endl;
 	cout << "Display items list:" << endl;
 	for (auto it = items.begin(); it < items.end(); it++) {
-		cout << "Item ID " << it->id << ", Name " << it->name << ", Price " << it->price << ", Quantity " << it->quantity << endl;
+		cout << "Item ID: " << it->id << ", Name: " << it->name << ", Price: " << it->price << ", Quantity: " << it->quantity << endl;
+		myfile_o << "Item ID: " << it->id << ", Name: " << it->name << ", Price: " << it->price << ", Quantity: " << it->quantity << endl;
+
 	};
-	
 }
 
 
@@ -91,24 +112,68 @@ int main()
 {
 	cout << endl;
     cout << "--- Book store Application ---\n";
-    Inventory inventoy;
+    Inventory inventoy; //Create tnventory operations object
+
+	myfile_o.open("output.csv", fstream::app);
+	if (myfile_o.is_open()) {
+	}
+	else {
+		cout << "Error openning the file for writing!" << endl;
+		myfile_o.close();
+		return -1;
+	}
 
 	cout << endl;
-	inventoy.add_item(100001, "SQL Quick Start", 49.99, 3);
-	inventoy.add_item(100002, "SQL Intermediate", 79.99, 2);
-	inventoy.add_item(100003, "SQL Advanced", 79.99, 2);
-	inventoy.display_items();
+	int menu_option = 0;
+	int item_id = 0;
+	float item_price;
+	bool exit = false;
+	while (exit == false) {
+		cout << "--- Menu: ---" << endl;
+		cout << "1. Add an item." << endl;
+		cout << "2. Remove one item." << endl;
+		cout << "3. Update item price." << endl;
+		cout << "4. Display items." << endl;
+		cout << "5. Exit the program." << endl;
 
-	inventoy.update_item_price(100004, 154.5);
-	inventoy.update_item_price(100002, 45.99);
-	inventoy.display_items();
+		cout << "Select your option: ";
+		cin >> menu_option;
 
-	inventoy.remove_item(100002);
-	inventoy.display_items();
+		switch (menu_option) {
+		case 1:
+			inventoy.add_item();
+			break;
+		case 2:
+			cout << "Enter the item ID you want to remove: ";
+			cin >> item_id;
+			inventoy.remove_item(item_id);
+			break;
+		case 3:
+			cout << "Enter the item ID: ";
+			cin >> item_id;
+			cout << endl << "Enter the new price: ";
+			cin >> item_price;
+			inventoy.remove_item(item_id);
+			break;
+		case 4:
+			cout << "Print the items list: ";
+			inventoy.display_items();
+			break;
+		case 5:
+			cout << "Exiting the application!" << endl;
+			exit = true;
+			break;
 
-	cout << endl;
-	cout << endl;
+		case 0:
+		default:
+			cout << "Invalid option entered. Try again!" << endl;
+			break;
+		}
 
+		cout << endl;
+	}
+
+	myfile_o.close();
 	return 0;
 }
 
